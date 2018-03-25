@@ -27,6 +27,11 @@
         "webmozart/path-util": "^2.3"
     },
     "require-dev": {
+        "behat/mink-extension": "v2.2",
+        "behat/mink-selenium2-driver": "^1.3",
+        "bex/behat-screenshot": "^1.2",
+        "drupal/coder": "^8.2",
+        "drupal/drupal-extension": "master-dev",
         "webflo/drupal-core-require-dev": "~8.5"
     },
     "conflict": {
