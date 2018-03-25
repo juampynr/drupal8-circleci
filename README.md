@@ -8,5 +8,5 @@ runs the following jobs against it:
 
 ![CircleCI jobs](docs/images/circleci-db-env.png)
 
-If you want to install this into a Drupal 8 site, follow instructions at the
-[CircleCI installer](https://github.com/Lullabot/drupal8ci#circleci).
+If you want to install this into your project, follow instructions at the
+[CircleCI installer for Drupal 8](https://github.com/Lullabot/drupal8ci#circleci).
