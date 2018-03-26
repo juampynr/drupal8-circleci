@@ -54,7 +54,7 @@ unit_kernel_tests: &unit_kernel_tests
           mkdir -p artifacts/phpunit
           chmod -R 777 artifacts
           cd web
-          sudo -E -u www-data ../vendor/bin/phpunit -c core --debug --verbose --log-junit ../artifacts/phpunit/phpunit.xml modules/custom
+          sudo -E -u www-data ../vendor/bin/phpunit -c core --debug --verbose --log-junit ../artifacts/phpunit/phpunit.xml
     - store_test_results:
         path: /var/www/html/artifacts/phpunit
     - store_artifacts:

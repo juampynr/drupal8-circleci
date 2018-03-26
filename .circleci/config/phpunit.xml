@@ -60,11 +60,17 @@
   </listeners>
   <!-- Filter for coverage reports. -->
   <filter>
-    <whitelist processUncoveredFilesFromWhitelist="true">
+    <whitelist>
+      <directory>./includes</directory>
+      <directory>./lib</directory>
+      <directory>./modules</directory>
+      <directory>../modules</directory>
+      <directory>../sites</directory>
       <directory>../modules/custom</directory>
       <!-- By definition test classes have no tests. -->
       <exclude>
-        <directory>../modules/custom/*/tests</directory>
+        <directory suffix="Test.php">./</directory>
+        <directory suffix="TestBase.php">./</directory>
       </exclude>
     </whitelist>
   </filter>
