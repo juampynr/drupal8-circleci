@@ -47,7 +47,6 @@ unit_kernel_tests: &unit_kernel_tests
     - run:
         name: Set up and run Unit and Kernel tests
         command: |
-          apache2-foreground&
           robo install:dependencies
           robo setup:drupal || true
           cp .circleci/config/phpunit.xml web/core/
