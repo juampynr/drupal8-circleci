@@ -12,73 +12,74 @@
  */
 class RoboFile extends \Robo\Tasks
 {
-    /**
-     * @var string $db_url
-     *   The database URL. This can be overridden by specifying a $DB_URL
-     *   environment variable.
-     */
-    protected $db_url = 'mysql://root@127.0.0.1/drupal8';
 
     /**
-     * RoboFile constructor.
+     * The database URL.
+     *
+     * @var string
      */
-    public function __construct()
+    const DB_URL = 'mysql://root@127.0.0.1/drupal8';
+
+    /**
+     * Command to run unit tests.
+     *
+     * @return \Robo\Result
+     *   The result of the collection of tasks.
+     */
+    public function jobRunUnitTests()
     {
-        // Pull a DB_URL from the environment, if it exists.
-        if (filter_var(getenv('DB_URL'), FILTER_VALIDATE_URL)) {
-            $this->db_url = getenv('DB_URL');
-        }
-        // Treat this command like bash -e and exit as soon as there's a failure.
-        $this->stopOnFail();
+        $collection = $this->collectionBuilder();
+        $collection->addTask($this->installDependencies());
+        $collection->addTask($this->installDrupal());
+        $collection->addTaskList($this->runUnitTests());
+        return $collection->run();
     }
 
     /**
      * Installs composer dependencies.
+     *
+     * @return \Robo\Contract\TaskInterface
+     *   A task instance.
      */
-    public function installDependencies()
+    protected function installDependencies()
     {
-        $this->taskComposerInstall()
-            ->optimizeAutoloader()
-            ->run();
+        return $this->taskComposerInstall()
+            ->optimizeAutoloader();
     }
 
     /**
      * Install Drupal.
      *
-     * @param string $admin_user
-     *   (optional) The administrator's username.
-     * @param string $admin_password
-     *   (optional) The administrator's password.
-     * @param string $site_name
-     *   (optional) The Drupal site name.
+     * @return \Robo\Task\Base\Exec
+     *   A task to install Drupal.
      */
-    public function setupDrupal(
-        $admin_user = null,
-        $admin_password = null,
-        $site_name = null
-    )
+    protected function installDrupal()
     {
         $task = $this->drush()
             ->args('site-install')
+            ->option('verbose')
             ->option('yes')
-            ->option('db-url', $this->db_url, '=');
+            ->option('db-url', static::DB_URL, '=');
+        return $task;
+    }
 
-        if ($admin_user) {
-            $task->option('account-name', $admin_user, '=');
-        }
-
-        if ($admin_password) {
-            $task->option('account-pass', $admin_password, '=');
-        }
-
-        if ($site_name) {
-            $task->option('site-name', $site_name, '=');
-        }
-
-        // Sending email will fail, so we need to allow this to always pass.
-        $this->stopOnFail(false);
-        $task->run();
-        $this->stopOnFail();
+    /**
+     * Run unit tests.
+     *
+     * @return \Robo\Task\Base\Exec[]
+     *   An array of tasks.
+     */
+    protected function runUnitTests()
+    {
+        $force = true;
+        $tasks = [];
+        $tasks[] = $this->taskFilesystemStack()
+            ->copy('.circleci/config/phpunit.xml', 'web/core/phpunit.xml', $force)
+            ->mkdir('artifacts/phpunit', 777);
+        $tasks[] = $this->taskExecStack()
+            ->dir('web')
+            ->exec('../vendor/bin/phpunit -c core --debug --verbose --log-junit ../artifacts/phpunit/phpunit.xml modules/custom');
+        return $tasks;
     }
 
     /**
