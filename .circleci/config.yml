@@ -121,21 +121,7 @@ code_coverage: &code_coverage
     - restore_cache: *restore_cache
     - run:
         name: Set up and inspect code coverage
-        environment:
-          SIMPLETEST_BASE_URL: "http://localhost"
-          SIMPLETEST_DB: "sqlite://localhost//tmp/drupal.sqlite"
-          BROWSERTEST_OUTPUT_DIRECTORY: "/var/www/html/sites/simpletest"
-        command: |
-          robo install:dependencies
-          robo setup:drupal || true
-          cp .circleci/config/phpunit.xml web/core/
-          mkdir -p artifacts/coverage-xml
-          mkdir -p artifacts/coverage-html
-          chmod -R 777 artifacts
-          cd web
-          timeout 60m sudo -E -u www-data ../vendor/bin/phpunit --verbose --debug -c core --coverage-xml ../artifacts/coverage-xml --coverage-html ../artifacts/coverage-html --testsuite nonfunctional modules/custom
-          cd ../
-          tar czf artifacts/coverage.tar.gz -C artifacts coverage-html coverage-xml
+        command: robo job:generate-coverage-report
     - store_artifacts:
         path: /var/www/html/artifacts
     - save_cache: *save_cache
