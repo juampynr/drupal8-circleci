@@ -61,9 +61,6 @@ behat_tests: &behat_tests
     - *copy_robo
     - restore_cache: *restore_cache
     - run:
-        name: Wait for the database service to be ready
-        command: dockerize -wait tcp://localhost:3306 -timeout 1m
-    - run:
         name: Install database and run the update path
         command: |
           robo install:dependencies
@@ -100,7 +97,7 @@ code_sniffer: &code_sniffer
     - restore_cache: *restore_cache
     - run:
         name: Set up and inspect coding standards
-        command: robo job:generate-coverage-report
+        command: robo job:check-coding-standards
     - store_test_results:
         path: /var/www/html/artifacts/phpcs
     - store_artifacts:

@@ -30,6 +30,7 @@ class RoboFile extends \Robo\Tasks
     {
         $collection = $this->collectionBuilder();
         $collection->addTask($this->installDependencies());
+        $collection->addTask($this->waitForDatabase());
         $collection->addTask($this->installDrupal());
         $collection->addTaskList($this->runUnitTests());
         return $collection->run();
@@ -45,6 +46,7 @@ class RoboFile extends \Robo\Tasks
     {
         $collection = $this->collectionBuilder();
         $collection->addTask($this->installDependencies());
+        $collection->addTask($this->waitForDatabase());
         $collection->addTask($this->installDrupal());
         $collection->addTaskList($this->runUnitTestsWithCoverage());
         return $collection->run();
@@ -59,7 +61,7 @@ class RoboFile extends \Robo\Tasks
     public function jobCheckCodingStandards()
     {
         $collection = $this->collectionBuilder();
-        $collection->addTaskList($this->installDependencies());
+        $collection->addTask($this->installDependencies());
         $collection->addTaskList($this->runCodeSniffer());
         return $collection->run();
     }
@@ -77,6 +79,16 @@ class RoboFile extends \Robo\Tasks
     }
 
     /**
+     * Waits for the database service to be ready.
+     *
+     * @return \Robo\Contract\TaskInterface
+     *   A task instance.
+     */
+    protected function waitForDatabase() {
+        return $this->taskExec('dockerize -wait tcp://localhost:3306 -timeout 1m');
+    }
+
+    /**
      * Install Drupal.
      *
      * @return \Robo\Task\Base\Exec
@@ -84,6 +96,7 @@ class RoboFile extends \Robo\Tasks
      */
     protected function installDrupal()
     {
+
         $task = $this->drush()
             ->args('site-install')
             ->option('verbose')
