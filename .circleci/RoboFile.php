@@ -51,6 +51,20 @@ class RoboFile extends \Robo\Tasks
     }
 
     /**
+     * Command to check for Drupal's Coding Standards.
+     *
+     * @return \Robo\Result
+     *   The result of the collection of tasks.
+     */
+    public function jobCheckCodingStandards()
+    {
+        $collection = $this->collectionBuilder();
+        $collection->addTaskList($this->installDependencies());
+        $collection->addTaskList($this->runCodeSniffer());
+        return $collection->run();
+    }
+
+    /**
      * Installs composer dependencies.
      *
      * @return \Robo\Contract\TaskInterface
@@ -118,15 +132,22 @@ class RoboFile extends \Robo\Tasks
     }
 
     /**
-    cp .circleci/config/phpunit.xml web/core/
-    mkdir -p artifacts/coverage-xml
-    mkdir -p artifacts/coverage-html
-    chmod -R 777 artifacts
-    cd web
-    timeout 60m sudo -E -u www-data ../vendor/bin/phpunit --verbose --debug -c core --coverage-xml ../artifacts/coverage-xml --coverage-html ../artifacts/coverage-html --testsuite nonfunctional modules/custom
-    cd ../
-    tar czf artifacts/coverage.tar.gz -C artifacts coverage-html coverage-xml
+     * Sets up and runs code sniffer.
+     *
+     * @return \Robo\Task\Base\Exec[]
+     *   An array of tasks.
      */
+    protected function runCodeSniffer() {
+        $tasks = [];
+        $tasks[] = $this->taskExecStack()
+            ->exec('vendor/bin/phpcs --config-set installed_paths vendor/drupal/coder/coder_sniffer');
+        $tasks[] = $this->taskFilesystemStack()
+            ->mkdir('artifacts/phpcs');
+        $tasks[] = $this->taskExecStack()
+            ->exec('vendor/bin/phpcs --standard=Drupal --report=junit --report-junit=artifacts/phpcs/phpcs.xml web/modules/custom')
+            ->exec('vendor/bin/phpcs --standard=DrupalPractice --report=junit --report-junit=artifacts/phpcs/phpcs.xml web/modules/custom');
+        return $tasks;
+    }
 
     /**
      * Return drush with default arguments.
