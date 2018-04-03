@@ -67,6 +67,78 @@ class RoboFile extends \Robo\Tasks
     }
 
     /**
+     * Command to run behat tests.
+     *
+     * @return \Robo\Result
+     *   The result tof the collection of tasks.
+     */
+    public function jobRunBehatTests()
+    {
+        $collection = $this->collectionBuilder();
+        $collection->addTask($this->installDependencies());
+        $collection->addTask($this->waitForDatabase());
+        $collection->addTaskList($this->importDatabase());
+        $collection->addTaskList($this->runUpdatePath());
+        $collection->addTaskList($this->runBehatTests());
+        return $collection->run();
+    }
+
+    /**
+     * Imports and updates the database.
+     *
+     * This task assumes that there is an environment variable $DB_DUMP_URL
+     * that contains a URL to a database dump. Ideally, you should set up drush
+     * site aliases and then replace this task by a drush sql-sync one. See the
+     * README at lullabot/drupal8ci for further details.
+     *
+     * @return \Robo\Task\Base\Exec[]
+     *   An array of tasks.
+     */
+    protected function importDatabase()
+    {
+        $force = true;
+        $tasks = [];
+        $tasks[] = $this->taskExec('mysql -u root -h 127.0.0.1 -e "create database drupal8"');
+        $tasks[] = $this->taskFilesystemStack()
+            ->copy('.circleci/config/settings.local.php', 'web/sites/default/settings.local.php', $force);
+        $tasks[] = $this->taskExec('wget -O dump.sql ' . getenv('DB_DUMP_URL'));
+        $tasks[] = $this->drush()->rawArg('sql-cli < dump.sql');
+        return $tasks;
+    }
+
+    /**
+     * Updates the database.
+     *
+     *
+     * @return \Robo\Task\Base\Exec[]
+     *   An array of tasks.
+     */
+    protected function runUpdatePath()
+    {
+        $tasks = [];
+        $tasks[] = $this->drush()->args('updatedb')->option('yes')->option('verbose');
+        $tasks[] = $this->drush()->args('config-import')->option('yes')->option('verbose');
+        return $tasks;
+    }
+
+    /**
+     * Runs Behat tests.
+     *
+     * @return \Robo\Task\Base\Exec[]
+     *   An array of tasks.
+     */
+    protected function runBehatTests()
+    {
+        $force = true;
+        $tasks = [];
+        $tasks[] = $this->taskExec('service apache2 start');
+        $tasks[] = $this->taskFilesystemStack()
+            ->copy('.circleci/config/behat.yml', 'tests/behat.yml', $force);
+        $tasks[] = $this->taskExec('vendor/bin/behat --verbose -c tests/behat.yml');
+        return $tasks;
+    }
+
+    /**
      * Installs composer dependencies.
      *
      * @return \Robo\Contract\TaskInterface
@@ -84,7 +156,8 @@ class RoboFile extends \Robo\Tasks
      * @return \Robo\Contract\TaskInterface
      *   A task instance.
      */
-    protected function waitForDatabase() {
+    protected function waitForDatabase()
+    {
         return $this->taskExec('dockerize -wait tcp://localhost:3306 -timeout 1m');
     }
 
@@ -150,7 +223,8 @@ class RoboFile extends \Robo\Tasks
      * @return \Robo\Task\Base\Exec[]
      *   An array of tasks.
      */
-    protected function runCodeSniffer() {
+    protected function runCodeSniffer()
+    {
         $tasks = [];
         $tasks[] = $this->taskExecStack()
             ->exec('vendor/bin/phpcs --config-set installed_paths vendor/drupal/coder/coder_sniffer');
