@@ -19,7 +19,7 @@ defaults: &defaults
       environment:
         MYSQL_ALLOW_EMPTY_PASSWORD: 1
 
-  working_directory: /var/www/html
+  working_directory: /opt/drupal
 
 ## Defines the cache restoring mechanism.
 restore_cache: &restore_cache
