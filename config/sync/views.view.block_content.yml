@@ -1,4 +1,4 @@
-uuid: 3cead01d-cb60-4b88-bdef-bb87790c2827
+uuid: 7a0f27fd-30a3-485b-b5d6-24d348cbfd54
 langcode: en
 status: true
 dependencies:
@@ -6,7 +6,7 @@ dependencies:
     - block_content
     - user
 _core:
-  default_config_hash: gkRJCqHr3uSO8ALHLatX-7YKfX0lWEgkC5qMBtCf_Sg
+  default_config_hash: 2J0rd5cWfFsdSX-kAb0f9EzvC0_vn4NxGlUpOQAXeOU
 id: block_content
 label: 'Custom block library'
 module: views
@@ -14,7 +14,6 @@ description: 'Find and manage custom blocks.'
 tag: default
 base_table: block_content_field_data
 base_field: id
-core: 8.x
 display:
   default:
     display_plugin: default
@@ -378,6 +377,8 @@ display:
               authenticated: authenticated
               anonymous: '0'
               administrator: '0'
+            operator_limit_selection: false
+            operator_list: {  }
           is_grouped: false
           group_info:
             label: ''
@@ -419,6 +420,8 @@ display:
               anonymous: '0'
               administrator: '0'
             reduce: false
+            operator_limit_selection: false
+            operator_list: {  }
           is_grouped: false
           group_info:
             label: ''
@@ -434,6 +437,46 @@ display:
           entity_type: block_content
           entity_field: type
           plugin_id: bundle
+        reusable:
+          id: reusable
+          table: block_content_field_data
+          field: reusable
+          relationship: none
+          group_type: group
+          admin_label: ''
+          operator: '='
+          value: '1'
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            operator_limit_selection: false
+            operator_list: {  }
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          entity_type: block_content
+          entity_field: reusable
+          plugin_id: boolean
       sorts: {  }
       title: 'Custom block library'
       header: {  }

@@ -1,4 +1,4 @@
-uuid: b342d282-fe89-4334-8719-f50c9ed00bd3
+uuid: 8a53f653-cbc0-4105-84a7-c7e0e9d39e26
 langcode: en
 status: true
 dependencies:
@@ -7,7 +7,7 @@ dependencies:
     - node
     - user
 _core:
-  default_config_hash: HacS-nsDH7uyoKhQHNyV_MNRClmPVuhU_fWZgNuEyIs
+  default_config_hash: rX48v_U7vIh1FltSyJnTdpebtM-lj991qL_jO8BmZ2w
 id: comments_recent
 label: 'Recent comments'
 module: views
@@ -15,7 +15,6 @@ description: 'Recent comments.'
 tag: default
 base_table: comment_field_data
 base_field: cid
-core: 8.x
 display:
   default:
     display_plugin: default
@@ -179,6 +178,8 @@ display:
           plugin_id: boolean
           expose:
             operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
           group: 1
           entity_type: comment
           entity_field: status
@@ -191,6 +192,8 @@ display:
           plugin_id: boolean
           expose:
             operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
           group: 1
           entity_type: node
           entity_field: status
