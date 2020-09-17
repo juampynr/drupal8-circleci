@@ -1,4 +1,4 @@
-uuid: eabb0a3c-b086-48fa-b225-f5d84a0de870
+uuid: 65017ff6-bd21-4434-baca-efe2061883c5
 langcode: en
 status: true
 dependencies:
@@ -6,7 +6,7 @@ dependencies:
     - comment
     - user
 _core:
-  default_config_hash: cCq1vjj1qmyd39oBIUyOe8YPDsobJ5fZRhp2Xy5O7lA
+  default_config_hash: fsBo_zgUeLyYZdghaw4PkOHA-HqFxu7wmQLilF35XYg
 id: comment
 label: Comments
 module: comment
@@ -14,7 +14,6 @@ description: 'Find and manage comments.'
 tag: default
 base_table: comment_field_data
 base_field: cid
-core: 8.x
 display:
   default:
     display_plugin: default
@@ -653,6 +652,8 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
+            operator_limit_selection: false
+            operator_list: {  }
           is_grouped: false
           group_info:
             label: ''
@@ -693,6 +694,8 @@ display:
               authenticated: authenticated
               anonymous: '0'
               administrator: '0'
+            operator_limit_selection: false
+            operator_list: {  }
           is_grouped: false
           group_info:
             label: ''
@@ -733,6 +736,8 @@ display:
               authenticated: authenticated
               anonymous: '0'
               administrator: '0'
+            operator_limit_selection: false
+            operator_list: {  }
           is_grouped: false
           group_info:
             label: ''
@@ -775,6 +780,8 @@ display:
               anonymous: '0'
               administrator: '0'
             reduce: false
+            operator_limit_selection: false
+            operator_list: {  }
           is_grouped: false
           group_info:
             label: ''
@@ -926,6 +933,8 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
+            operator_limit_selection: false
+            operator_list: {  }
           is_grouped: false
           group_info:
             label: ''
@@ -966,6 +975,8 @@ display:
               authenticated: authenticated
               anonymous: '0'
               administrator: '0'
+            operator_limit_selection: false
+            operator_list: {  }
           is_grouped: false
           group_info:
             label: ''
@@ -1006,6 +1017,8 @@ display:
               authenticated: authenticated
               anonymous: '0'
               administrator: '0'
+            operator_limit_selection: false
+            operator_list: {  }
           is_grouped: false
           group_info:
             label: ''
@@ -1048,6 +1061,8 @@ display:
               anonymous: '0'
               administrator: '0'
             reduce: false
+            operator_limit_selection: false
+            operator_list: {  }
           is_grouped: false
           group_info:
             label: ''

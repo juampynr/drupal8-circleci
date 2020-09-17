@@ -1,4 +1,4 @@
-uuid: 6aae78b2-70c5-43d5-aeb1-100444997997
+uuid: 61873374-5c23-43cf-96b6-c125f614f813
 langcode: en
 status: true
 dependencies:
@@ -9,7 +9,7 @@ dependencies:
     - path
     - text
 _core:
-  default_config_hash: sb0qCkzU_8mNq29NehYAU8jCBXWPLeX0UN8sYFVGVcw
+  default_config_hash: AD_lefuYmjsKeH3OQApsyP_nLj6ZnGaALznLQSQ0Z_o
 id: node.page.default
 targetEntityType: node
 bundle: page
@@ -23,6 +23,7 @@ content:
       rows: 9
       summary_rows: 3
       placeholder: ''
+      show_summary: false
     third_party_settings: {  }
   created:
     type: datetime_timestamp
@@ -71,6 +72,7 @@ content:
     region: content
     settings:
       match_operator: CONTAINS
+      match_limit: 10
       size: 60
       placeholder: ''
     third_party_settings: {  }

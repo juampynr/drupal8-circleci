@@ -1,4 +1,4 @@
-uuid: 8cb22e60-eb21-4871-ade9-c88d388dec25
+uuid: b05ec6a0-16e4-4fa3-8671-68b37330119c
 langcode: en
 status: true
 dependencies:
@@ -6,7 +6,7 @@ dependencies:
     - dblog
     - user
 _core:
-  default_config_hash: 3QZ9apklK6mQ7BzodmxzOxqO---2BCPtOLE3k9eQ0Is
+  default_config_hash: oG4FVrpj6HxivwdvkAyY23ApbR-iWTnKvM4JHdJ6XmA
 id: watchdog
 label: Watchdog
 module: views
@@ -14,7 +14,6 @@ description: 'Recent log messages'
 tag: ''
 base_table: watchdog
 base_field: wid
-core: 8.x
 display:
   default:
     display_plugin: default
@@ -585,6 +584,8 @@ display:
               anonymous: '0'
               administrator: '0'
             reduce: false
+            operator_limit_selection: false
+            operator_list: {  }
           is_grouped: false
           group_info:
             label: ''
@@ -624,6 +625,8 @@ display:
               anonymous: '0'
               administrator: '0'
             reduce: false
+            operator_limit_selection: false
+            operator_list: {  }
           is_grouped: false
           group_info:
             label: ''
@@ -655,18 +658,16 @@ display:
       footer: {  }
       empty:
         area:
-          id: area
+          id: area_text_custom
           table: views
-          field: area
+          field: area_text_custom
           relationship: none
           group_type: group
-          admin_label: ''
+          admin_label: 'No log messages available.'
           empty: true
           tokenize: false
-          content:
-            value: 'No log messages available.'
-            format: basic_html
-          plugin_id: text
+          content: 'No log messages available.'
+          plugin_id: text_custom
       relationships:
         uid:
           id: uid
